@@ -524,7 +524,21 @@ class FunctionDoc(NumpyDocString):
 
 class ClassDoc(NumpyDocString):
 
-    extra_public_methods = ['__call__']
+    extra_public_methods = ['__call__',
+                            '_call',
+                            '_apply',
+                            '_lincomb',
+                            '_multiply',
+                            '_divide',
+                            '_dist',
+                            '_norm',
+                            '_inner',
+                            '__contains__',
+                            '__eq__',
+                            '__getitem__',
+                            '__setitem__']
+                            
+    excluded_methods = ['next']
 
     def __init__(self, cls, doc=None, modulename='', func_doc=FunctionDoc,
                  config={}):
@@ -586,6 +600,9 @@ class ClassDoc(NumpyDocString):
                     and self._is_show_member(name))]
 
     def _is_show_member(self, name):
+        if name in self.excluded_methods:
+            return False
+        
         if self.show_inherited_members:
             return True  # show all class members
         if name not in self._cls.__dict__:
